@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bullseye Strength</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-primary:    #000000;
+  --bg-secondary:  #080808;
+  --bg-card:       #0d0d0d;
+  --text-headline: #FFFFFF;
+  --text-body:     #B3B3B3;
+  --text-muted:    #555555;
+  --accent-start:  #FF4D00;
+  --accent-end:    #FFCC00;
+  --border:        rgba(255,255,255,0.08);
+  --border-accent: rgba(255,100,0,0.3);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg-primary);
+  color: var(--text-body);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.league {
+  font-family: 'League Gothic', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 0.92;
+}
+.gradient-text {
+  background: linear-gradient(to right, var(--accent-start), var(--accent-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── BUTTONS ── */
+.btn-primary {
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: #000;
+  color: #fff !important;
+  border: 1.5px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  padding: 16px 36px;
+  cursor: pointer;
+  border-radius: 2px;
+  display: inline-block;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s;
+  line-height: 1;
+  z-index: 0;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--accent-start), var(--accent-end));
+  z-index: -1;
+}
+.btn-primary:hover { opacity: 0.85; transform: translateY(-2px); }
+
+.btn-ghost {
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: #000;
+  color: #fff !important;
+  border: 1.5px solid transparent;
+  position: relative;
+  padding: 15px 28px;
+  cursor: pointer;
+  border-radius: 2px;
+  display: inline-block;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s;
+  line-height: 1;
+  z-index: 0;
+}
+.btn-ghost::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--accent-start), var(--accent-end));
+  z-index: -1;
+}
+.btn-ghost:hover { opacity: 0.85; transform: translateY(-2px); }
+
+/* ── UTILITIES ── */
+.divider-gradient {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--accent-start), var(--accent-end), transparent);
+  opacity: 0.4;
+  margin-top: 60px;
+}
+.grid-bg {
+  background-color: var(--bg-secondary);
+  background-image:
+    linear-gradient(to right, #141414 1px, transparent 1px),
+    linear-gradient(to bottom, #141414 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.section-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-start);
+  margin-bottom: 20px;
+  display: block;
+}
+.section-h2 {
+  font-family: 'League Gothic', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 0.95;
+  color: #fff;
+  font-size: clamp(38px, 5.5vw, 68px);
+  margin-bottom: 36px;
+}
+.body-p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-body);
+  margin-bottom: 20px;
+}
+.body-p strong { color: #fff; font-weight: 500; }
+
+/* ── SCROLL REVEAL ANIMATION ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.45s; }
+
+/* ============================================================
+   NAV
+   ============================================================ */
+#bs-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 999;
+  height: 64px;
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo img {
+  height: 32px;
+  width: auto;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: #fff; }
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+/* ── MOBILE NAV ── */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+.nav-hamburger span {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: #fff;
+  transition: all 0.3s;
+}
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 64px; left: 0; right: 0;
+  background: rgba(0,0,0,0.97);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 48px;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 998;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+#bs-hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 40px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-glow {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px; height: 500px;
+  background: radial-gradient(ellipse, rgba(255,77,0,0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+.crosshair {
+  position: absolute;
+  border: 1px solid var(--border-accent);
+  border-radius: 50%;
+}
+.crosshair::before, .crosshair::after {
+  content: '';
+  position: absolute;
+  background: var(--border-accent);
+}
+.crosshair::before { width: 1px; height: 100%; left: 50%; top: 0; }
+.crosshair::after  { height: 1px; width: 100%; top: 50%; left: 0; }
+
+.hero-logo {
+  margin-bottom: 32px;
+}
+.hero-logo img {
+  height: 72px;
+  width: auto;
+}
+.hero-image {
+  width: 100%;
+  max-width: 1000px;
+  height: auto;
+  display: block;
+  margin: 0 auto 40px;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--border-accent);
+  padding: 7px 18px;
+  border-radius: 2px;
+  margin-bottom: 36px;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,150,50,0.95);
+}
+.badge-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent-start);
+  flex-shrink: 0;
+}
+.hero-sub {
+  font-size: clamp(15px, 1.6vw, 19px);
+  color: var(--text-body);
+  max-width: 580px;
+  margin: 0 auto 44px;
+  line-height: 1.75;
+  font-weight: 300;
+}
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   AUTHORITY BAR
+   ============================================================ */
+#bs-authority {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.authority-inner {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 18px 48px;
+  gap: 0;
+  align-items: center;
+  scrollbar-width: none;
+}
+.authority-inner::-webkit-scrollbar { display: none; }
+.authority-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.authority-item:first-child { color: rgba(255,150,50,0.9); }
+.authority-sep {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: rgba(255,77,0,0.4);
+  flex-shrink: 0;
+  margin: 0 24px;
+}
+
+/* ============================================================
+   PROBLEM
+   ============================================================ */
+#bs-problem {
+  padding: 100px 48px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   METHOD
+   ============================================================ */
+#bs-method { padding: 100px 48px; }
+.method-inner { max-width: 1140px; margin: 0 auto; }
+.method-header { margin-bottom: 64px; }
+.method-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.method-card {
+  background: var(--bg-card);
+  padding: 40px 32px;
+  transition: background 0.25s;
+}
+.method-card:hover { background: #111; }
+.method-icon {
+  width: 46px; height: 46px;
+  border: 1px solid var(--border-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+  border-radius: 2px;
+  color: rgba(255,120,30,0.9);
+}
+.method-title {
+  font-family: 'League Gothic', sans-serif;
+  text-transform: uppercase;
+  font-size: 1.6rem;
+  color: #fff;
+  margin-bottom: 12px;
+  line-height: 1;
+}
+.method-desc {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--text-body);
+}
+
+/* ============================================================
+   APP SECTION
+   ============================================================ */
+#bs-app {
+  padding: 100px 48px;
+  border-top: 1px solid var(--border);
+}
+.app-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.app-mockup img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+.app-features {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 36px;
+}
+.app-feature {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.app-feature-icon {
+  width: 36px; height: 36px;
+  border: 1px solid var(--border-accent);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: rgba(255,120,30,0.9);
+}
+.app-feature-text h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.app-feature-text p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-body);
+}
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+#bs-about { padding: 100px 48px; border-top: 1px solid var(--border); }
+.about-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.about-img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  display: block;
+}
+.about-name {
+  font-family: 'League Gothic', sans-serif;
+  text-transform: uppercase;
+  font-size: clamp(40px, 5vw, 68px);
+  color: #fff;
+  line-height: 0.9;
+  margin-bottom: 8px;
+}
+.about-cred {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+}
+.about-badges {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+.badge {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-radius: 2px;
+}
+
+/* ============================================================
+   TESTIMONIALS
+   ============================================================ */
+#bs-testimonials {
+  padding: 100px 48px;
+  border-top: 1px solid var(--border);
+}
+.testimonials-inner { max-width: 1140px; margin: 0 auto; }
+.testimonials-header { margin-bottom: 60px; }
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.testimonial-card {
+  border: 1px solid var(--border);
+  padding: 36px 32px;
+  background: var(--bg-card);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.t-photo-placeholder {
+  height: 200px;
+  background: #111;
+  border: 1px solid #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-align: center;
+  line-height: 1.6;
+}
+.stars { color: var(--accent-end); font-size: 13px; letter-spacing: 2px; }
+.t-quote {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: #ccc;
+  font-style: italic;
+  flex-grow: 1;
+}
+.t-name {
+  font-size: 0.73rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: 500;
+}
+.t-tag { font-size: 0.68rem; color: var(--text-muted); margin-top: 3px; }
+
+/* ============================================================
+   FINAL CTA
+   ============================================================ */
+#bs-cta {
+  padding: 130px 48px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.cta-glow {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse, rgba(255,77,0,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-inner { max-width: 720px; margin: 0 auto; position: relative; }
+.cta-h2 {
+  font-family: 'League Gothic', sans-serif;
+  text-transform: uppercase;
+  font-size: clamp(52px, 8vw, 100px);
+  color: #fff;
+  line-height: 0.9;
+  margin-bottom: 24px;
+}
+.cta-sub {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-body);
+  margin-bottom: 48px;
+}
+.cta-note {
+  margin-top: 20px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+#bs-footer {
+  padding: 36px 48px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.footer-logo img { height: 28px; width: auto; }
+.footer-tagline { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 0.08em; margin-top: 4px; }
+.footer-links { display: flex; gap: 24px; align-items: center; }
+.footer-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: color 0.2s;
+}
+.footer-link:hover { color: #fff; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .method-grid { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .about-inner { grid-template-columns: 1fr; gap: 40px; }
+  .app-inner { grid-template-columns: 1fr; gap: 40px; }
+}
+@media (max-width: 640px) {
+  #bs-nav { padding: 0 20px; }
+  #bs-hero { padding: 80px 24px 60px; }
+  #bs-problem, #bs-method, #bs-app, #bs-about, #bs-testimonials, #bs-cta { padding: 70px 24px; }
+  #bs-footer { padding: 28px 24px; flex-direction: column; align-items: flex-start; }
+  .hero-ctas { flex-direction: column; align-items: center; }
+  .btn-primary, .btn-ghost { width: 100%; text-align: center; }
+  .mobile-menu { padding: 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAV
+     ============================================================ -->
+<nav id="bs-nav">
+  <a href="#" class="nav-logo">
+    <img src="logo.png" alt="Bullseye Strength" />
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#bs-method">Method</a></li>
+    <li><a href="#bs-app">The App</a></li>
+    <li><a href="#bs-about">About</a></li>
+    <li><a href="#bs-testimonials">Results</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <a href="#bs-cta" class="btn-primary" style="font-size:0.8rem;padding:10px 22px;">Apply Now</a>
+    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#bs-method" onclick="toggleMenu()">Method</a>
+  <a href="#bs-app" onclick="toggleMenu()">The App</a>
+  <a href="#bs-about" onclick="toggleMenu()">About</a>
+  <a href="#bs-testimonials" onclick="toggleMenu()">Results</a>
+  <a href="#bs-cta" onclick="toggleMenu()" style="color:rgba(255,150,50,0.9);">Apply Now →</a>
+</div>
+
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section id="bs-hero">
+  <div class="hero-glow"></div>
+  <div class="crosshair" style="width:80px;height:80px;top:18%;right:8%;opacity:0.3;"></div>
+  <div class="crosshair" style="width:40px;height:40px;bottom:22%;left:6%;opacity:0.15;"></div>
+
+  <!-- Logo -->
+  <div class="hero-logo reveal">
+    <img src="logo.png" alt="Bullseye Strength" />
+  </div>
+
+  <!-- Hero headline image -->
+  <img src="hero.png" alt="Elite Performance. Clinical Precision." class="hero-image reveal reveal-delay-2" />
+
+  <!-- Subtext -->
+  <p class="hero-sub reveal reveal-delay-3">
+    Turn your off-season into your most productive season. Medical-grade programming
+    for lifters who demand elite results through evidence-based discipline.
+  </p>
+
+  <!-- CTAs -->
+  <div class="hero-ctas reveal reveal-delay-4">
+    <a href="#bs-cta" class="btn-primary" style="font-size:1.05rem;padding:18px 40px;">
+      Book Your Free 60-Min Consult
+    </a>
+    <a href="#bs-method" class="btn-ghost" style="padding:17px 28px;">
+      See The Method
+    </a>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     AUTHORITY BAR
+     ============================================================ -->
+<div id="bs-authority">
+  <div class="authority-inner">
+    <div class="authority-item">RN, BSN Certified</div>
+    <div class="authority-sep"></div>
+    <div class="authority-item">CPR / ACLS Certified</div>
+    <div class="authority-sep"></div>
+    <div class="authority-item">Evidence-Based Hypertrophy</div>
+    <div class="authority-sep"></div>
+    <div class="authority-item">Powerlifting &amp; Physique</div>
+    <div class="authority-sep"></div>
+    <div class="authority-item">Clinical Programming</div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     PROBLEM / BRIDGE
+     ============================================================ -->
+<section id="bs-problem">
+  <span class="section-label reveal">The Problem</span>
+  <h2 class="section-h2 reveal">Most Athletes Hit a Plateau Because They Lack a System.</h2>
+  <p class="body-p reveal">
+    Whether you're chasing a specific powerlifting total or building a professional physique,
+    you need more than a cookie-cutter template. You need programming that scales with a
+    high-performance life — one that accounts for your recovery, your schedule, and your ceiling.
+  </p>
+  <p class="body-p reveal">
+    Bullseye Strength bridges the gap between <strong>clinical accuracy</strong> and
+    <strong>elite intensity</strong> — a framework designed to integrate into your lifestyle
+    seamlessly, built by a coach with an RN's eye for data and safety.
+  </p>
+  <div class="divider-gradient"></div>
+</section>
+
+
+<!-- ============================================================
+     THE METHOD
+     ============================================================ -->
+<section id="bs-method" class="grid-bg">
+  <div class="method-inner">
+    <div class="method-header">
+      <span class="section-label reveal">The Method</span>
+      <h2 class="section-h2 reveal">
+        A Platform Built for<br>
+        <span class="gradient-text">Serious Lifters.</span>
+      </h2>
+    </div>
+    <div class="method-grid">
+
+      <div class="method-card reveal">
+        <div class="method-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+          </svg>
+        </div>
+        <div class="method-title">Custom Programming</div>
+        <p class="method-desc">Tailored periodization for powerlifting, bodybuilding, or physique enhancement. No templates. No guessing.</p>
+      </div>
+
+      <div class="method-card reveal reveal-delay-1">
+        <div class="method-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+          </svg>
+        </div>
+        <div class="method-title">Weekly Technique Analysis</div>
+        <p class="method-desc">Detailed video reviews of your lifting mechanics. Actionable cues you can apply the very next session.</p>
+      </div>
+
+      <div class="method-card reveal reveal-delay-2">
+        <div class="method-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+        </div>
+        <div class="method-title">Precision Macro Coaching</div>
+        <p class="method-desc">Nutrition targets that evolve with your progress. Includes minimal-prep recipes that fit real life.</p>
+      </div>
+
+      <div class="method-card reveal reveal-delay-1">
+        <div class="method-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <div class="method-title">Direct Coach Access</div>
+        <p class="method-desc">Unlimited messaging for immediate feedback. No waiting 48 hours for a form check or a question answered.</p>
+      </div>
+
+      <div class="method-card reveal reveal-delay-2">
+        <div class="method-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+          </svg>
+        </div>
+        <div class="method-title">Comprehensive Check-Ins</div>
+        <p class="method-desc">Weekly questionnaires monitoring recovery, biofeedback, and stress. Data-driven adjustments every week.</p>
+      </div>
+
+      <div class="method-card reveal reveal-delay-3" style="background:#080808;display:flex;flex-direction:column;justify-content:flex-end;">
+        <p style="font-family:'League Gothic',sans-serif;text-transform:uppercase;font-size:1.8rem;color:rgba(255,255,255,0.06);line-height:1;margin-bottom:16px;">
+          Evidence-Based.<br>Always.
+        </p>
+        <div style="height:2px;width:48px;background:linear-gradient(to right,#FF4D00,#FFCC00);border-radius:1px;"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     THE APP
+     ============================================================ -->
+<section id="bs-app">
+  <div class="app-inner">
+
+    <div class="app-mockup reveal">
+      <img src="app-mockup.png" alt="Bullseye Strength App" />
+    </div>
+
+    <div class="reveal reveal-delay-2">
+      <span class="section-label">The Platform</span>
+      <h2 class="section-h2">
+        Your Training.<br>
+        <span class="gradient-text">All in One Place.</span>
+      </h2>
+      <p class="body-p">
+        Every client gets access to a dedicated training app — purpose-built for
+        serious athletes. Your program, your check-ins, your progress, and your
+        coach are all in one seamless platform.
+      </p>
+
+      <div class="app-features">
+        <div class="app-feature">
+          <div class="app-feature-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+            </svg>
+          </div>
+          <div class="app-feature-text">
+            <h4>Live Program Access</h4>
+            <p>Your full training program updated in real time. Always know what's next.</p>
+          </div>
+        </div>
+        <div class="app-feature">
+          <div class="app-feature-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <div class="app-feature-text">
+            <h4>Performance Tracking</h4>
+            <p>Log every session. Track PRs, volume, and trends over time.</p>
+          </div>
+        </div>
+        <div class="app-feature">
+          <div class="app-feature-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <div class="app-feature-text">
+            <h4>Direct Messaging</h4>
+            <p>Message Jeff directly inside the app. Fast answers, no friction.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     ABOUT
+     ============================================================ -->
+<section id="bs-about">
+  <div class="about-inner">
+    <div class="reveal">
+      <img src="Jeff.PNG" alt="Coach Jeff" class="about-img" />
+    </div>
+    <div class="reveal reveal-delay-2">
+      <span class="section-label">About the Coach</span>
+      <div class="about-name">Jeff</div>
+      <div class="about-cred">RN, BSN &nbsp;·&nbsp; CPR/ACLS Certified</div>
+      <p class="body-p">
+        Jeff is a strength and hypertrophy coach for lifters pursuing elite personal performance. As a Registered Nurse, he brings a clinical perspective to strength training that most coaches simply can't offer.
+      </p>
+      <p class="body-p">
+        His approach prioritizes data and safety while pushing the human body to its limit — specializing in helping busy professionals integrate a high-level fitness lifestyle without compromising other life goals.
+      </p>
+      <div class="about-badges">
+        <span class="badge">RN, BSN</span>
+        <span class="badge">Evidence-Based</span>
+        <span class="badge">Powerlifting</span>
+        <span class="badge">Physique</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     TESTIMONIALS
+     ============================================================ -->
+<section id="bs-testimonials">
+  <div class="testimonials-inner">
+    <div class="testimonials-header">
+      <span class="section-label reveal">Results</span>
+      <h2 class="section-h2 reveal">Real Transformations.</h2>
+    </div>
+    <div class="testimonials-grid">
+
+      <div class="testimonial-card reveal">
+        <div class="t-photo-placeholder">
+          [ BEFORE / AFTER PHOTO ]<br>
+          <span style="font-size:0.65rem;opacity:0.45;">Replace with client image</span>
+        </div>
+        <div class="stars">★★★★★</div>
+        <p class="t-quote">"Jeff's medical background provides a level of precision I haven't found elsewhere."</p>
+        <div>
+          <div class="t-name">Client A &nbsp;·&nbsp; Replace Name</div>
+          <div class="t-tag">Powerlifter</div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal reveal-delay-1">
+        <div class="t-photo-placeholder">
+          [ BEFORE / AFTER PHOTO ]<br>
+          <span style="font-size:0.65rem;opacity:0.45;">Replace with client image</span>
+        </div>
+        <div class="stars">★★★★★</div>
+        <p class="t-quote">"Professional, organized, and effective. The best investment in my training career."</p>
+        <div>
+          <div class="t-name">Client B &nbsp;·&nbsp; Replace Name</div>
+          <div class="t-tag">Physique Competitor</div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal reveal-delay-2">
+        <div class="t-photo-placeholder">
+          [ BEFORE / AFTER PHOTO ]<br>
+          <span style="font-size:0.65rem;opacity:0.45;">Replace with client image</span>
+        </div>
+        <div class="stars">★★★★★</div>
+        <p class="t-quote">"Finally, a coach who understands how to balance elite goals with a busy career."</p>
+        <div>
+          <div class="t-name">Client C &nbsp;·&nbsp; Replace Name</div>
+          <div class="t-tag">Busy Professional</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FINAL CTA
+     ============================================================ -->
+<section id="bs-cta">
+  <div class="cta-glow"></div>
+  <div class="cta-inner reveal">
+    <span class="section-label">Ready to Train?</span>
+    <h2 class="cta-h2">Reach Your Peak.</h2>
+    <p class="cta-sub">
+      Stop guessing. Start progressing. Schedule a free 60-minute video consult
+      to discuss your goals and build your application.
+    </p>
+    <a href="REPLACE_WITH_CALENDAR_LINK" class="btn-primary" style="font-size:1.1rem;padding:20px 52px;">
+      Apply for 1:1 Coaching
+    </a>
+    <p class="cta-note">Currently accepting off-season bodybuilding and powerlifting clients.</p>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer id="bs-footer">
+  <div>
+    <div class="footer-logo">
+      <img src="logo.png" alt="Bullseye Strength" />
+    </div>
+    <div class="footer-tagline">Modern Professional Coaching.</div>
+  </div>
+  <div class="footer-links">
+    <a href="REPLACE_WITH_INSTAGRAM_URL" class="footer-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+      </svg>
+      Instagram
+    </a>
+    <a href="/cdn-cgi/l/email-protection#b4e6f1e4f8f5f7f1ebe3fde0fcebf1f9f5fdf8" class="footer-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+      Email
+    </a>
+  </div>
+</footer>
+
+
+<!-- ============================================================
+     JAVASCRIPT — scroll reveal + mobile menu
+     ============================================================ -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Scroll reveal
+  var revealEls = document.querySelectorAll('.reveal');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(function(el) { observer.observe(el); });
+
+  // Mobile menu
+  function toggleMenu() {
+    var menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('open');
+  }
+
+  // Nav scroll effect
+  var nav = document.getElementById('bs-nav');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 50) {
+ 
