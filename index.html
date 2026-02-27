@@ -52,7 +52,7 @@ body {
   letter-spacing: 0.12em;
   font-size: 0.9rem;
   font-weight: 500;
-  background: #000;
+  background: #000 !important;
   color: #fff !important;
   position: relative;
   padding: 16px 36px;
@@ -65,23 +65,14 @@ body {
   z-index: 0;
   border: none;
 }
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  inset: -1.5px;
-  border-radius: 2px;
-  background: linear-gradient(to right, var(--accent-start), var(--accent-end));
-  z-index: -1;
-}
-.btn-primary:hover { opacity: 0.82; transform: translateY(-2px); }
-
+  
 .btn-ghost {
   font-family: 'Inter', sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-size: 0.9rem;
   font-weight: 500;
-  background: #000;
+  background: transparent;
   color: #fff !important;
   position: relative;
   padding: 16px 28px;
@@ -91,18 +82,9 @@ body {
   text-decoration: none;
   transition: opacity 0.2s, transform 0.2s;
   line-height: 1;
-  z-index: 0;
-  border: none;
+  border: 1px solid rgba(255,255,255,0.5);
 }
-.btn-ghost::before {
-  content: '';
-  position: absolute;
-  inset: -1.5px;
-  border-radius: 2px;
-  background: linear-gradient(to right, var(--accent-start), var(--accent-end));
-  z-index: -1;
-}
-.btn-ghost:hover { opacity: 0.82; transform: translateY(-2px); }
+.btn-ghost:hover { border-color: #fff; transform: translateY(-2px); }
 
 /* ── UTILITIES ── */
 .divider-gradient {
@@ -247,7 +229,7 @@ body {
   max-width: 800px;
   height: auto;
   display: block;
-  margin: -40px auto 40px;
+  margin: 20px auto 40px;
 }
 .hero-sub {
   font-size: clamp(15px, 1.6vw, 19px);
