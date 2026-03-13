@@ -89,7 +89,7 @@ body { background: var(--bg-primary); color: var(--text-body); font-family: 'Int
 .mobile-menu a { font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; }
 
 /* HERO */
-#bs-hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 40px; position: relative; overflow: hidden; }
+#bs-hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 40px; position: relative; overflow: hidden; }
 .hero-glow { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); width: 700px; height: 500px; background: radial-gradient(ellipse, rgba(255,77,0,0.07) 0%, transparent 65%); pointer-events: none; }
 .crosshair { position: absolute; border: 1px solid var(--border-accent); border-radius: 50%; }
 .crosshair::before, .crosshair::after { content: ''; position: absolute; background: var(--border-accent); }
@@ -97,8 +97,8 @@ body { background: var(--bg-primary); color: var(--text-body); font-family: 'Int
 .crosshair::after { height: 1px; width: 100%; top: 50%; left: 0; }
 .hero-logo { margin-bottom: 40px; }
 .hero-logo img { height: 72px; width: auto; }
-.hero-image { width: 100%; max-width: 800px; height: auto; display: block; margin: 0 auto 40px; }
-.hero-sub { font-size: clamp(15px, 1.6vw, 19px); color: var(--text-body); max-width: 580px; margin: 0 auto 44px; line-height: 1.75; font-weight: 300; }
+.hero-image { width: 100%; max-width: 750px; max-height: 55vh; object-fit: contain; height: auto; display: block; margin: 0 auto 20px; }
+.hero-sub { font-size: clamp(15px, 1.2vw, 18px); color: var(--text-body); max-width: 800px; margin: 0 auto 30px; line-height: 1.6; font-weight: 300; }
 .hero-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 
 /* AUTHORITY BAR */
