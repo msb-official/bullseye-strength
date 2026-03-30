@@ -229,7 +229,44 @@ body { background: var(--bg-primary); color: var(--text-body); font-family: 'Int
     .trans-inner { flex-direction: column; gap: 40px; }
     .trans-img { max-width: 100%; }
 }
+/* BEFORE / AFTER SECTION */
+#bs-beforeafter { padding: 100px 48px; border-top: 1px solid var(--border); }
+.beforeafter-inner { max-width: 1140px; margin: 0 auto; }
+.beforeafter-header { margin-bottom: 60px; }
+.beforeafter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.beforeafter-card {
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  overflow: hidden;
+  border-radius: 2px;
+}
+.beforeafter-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.beforeafter-card:hover img { transform: scale(1.03); }
+.beforeafter-tag {
+  padding: 14px 20px;
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+}
 
+@media (max-width: 900px) {
+  .beforeafter-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .beforeafter-grid { grid-template-columns: 1fr; }
+  #bs-beforeafter { padding: 70px 24px; }
+}
 /* RESPONSIVE */
 @media (max-width: 900px) {
   .nav-links { display: none; }
@@ -445,6 +482,42 @@ body { background: var(--bg-primary); color: var(--text-body); font-family: 'Int
         </div>
 
         <p class="body-p" style="margin-top:30px; font-size: 0.95rem;">My own physique is the result of applying the same data-driven protocols I use with my 1:1 clients. This is what happens when clinical accuracy meets relentless effort.</p>
+      </div>
+    </div>
+  </div>
+</section>
+  <!-- BEFORE / AFTER -->
+<section id="bs-beforeafter">
+  <div class="beforeafter-inner">
+    <div class="beforeafter-header">
+      <span class="section-label reveal">Client Results</span>
+      <h2 class="section-h2 reveal">Results Don't Lie.<br><span class="gradient-text">The Programming Does.</span></h2>
+      <p class="body-p reveal" style="max-width:600px;">Real clients. Evidence-based protocols. Every transformation below was built on the same clinical programming Jeff applies to every 1:1 athlete — no crash diets, no unsustainable methods.</p>
+    </div>
+    <div class="beforeafter-grid">
+      <div class="beforeafter-card reveal">
+        <img src="before-after-1.jpg" alt="Client transformation 1" />
+        <div class="beforeafter-tag">Powerlifting · Off-Season</div>
+      </div>
+      <div class="beforeafter-card reveal reveal-delay-1">
+        <img src="before-after-2.jpg" alt="Client transformation 2" />
+        <div class="beforeafter-tag">Physique · Contest Prep</div>
+      </div>
+      <div class="beforeafter-card reveal reveal-delay-2">
+        <img src="before-after-3.jpg" alt="Client transformation 3" />
+        <div class="beforeafter-tag">Hypertrophy · Body Recomp</div>
+      </div>
+      <div class="beforeafter-card reveal">
+        <img src="before-after-4.jpg" alt="Client transformation 4" />
+        <div class="beforeafter-tag">Powerlifting · Strength Block</div>
+      </div>
+      <div class="beforeafter-card reveal reveal-delay-1">
+        <img src="before-after-5.jpg" alt="Client transformation 5" />
+        <div class="beforeafter-tag">Physique · Lean Bulk</div>
+      </div>
+      <div class="beforeafter-card reveal reveal-delay-2">
+        <img src="before-after-6.jpg" alt="Client transformation 6" />
+        <div class="beforeafter-tag">Hypertrophy · Off-Season</div>
       </div>
     </div>
   </div>
